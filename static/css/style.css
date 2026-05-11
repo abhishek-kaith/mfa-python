@@ -39,20 +39,6 @@ html, body {
     color: var(--fg);
 }
 
-.brand-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-    border-radius: 6px;
-    letter-spacing: 0.02em;
-    font-size: 1.05rem;
-}
-
 .brand-text {
     display: inline-flex;
     flex-direction: column;
