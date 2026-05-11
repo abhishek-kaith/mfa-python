@@ -41,6 +41,11 @@ WORKDIR /app
 COPY --chown=app:app . /app
 
 USER app
+
+# Build the WhiteNoise manifest so {% static %} works at runtime.
+# SECURE_SSL_REDIRECT etc. don't affect collectstatic; no DB is touched.
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
-CMD ["gunicorn", "config.wsgi:application", "-b", "0.0.0.0:8000", "-w", "3", "--access-logfile", "-"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && exec gunicorn config.wsgi:application -b 0.0.0.0:8000 -w ${GUNICORN_WORKERS:-3} --timeout 60 --access-logfile - --error-logfile -"]
