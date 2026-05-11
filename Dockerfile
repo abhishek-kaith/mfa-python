@@ -39,6 +39,9 @@ COPY --from=ghcr.io/astral-sh/uv:0.4.27 /uv /usr/local/bin/uv
 
 WORKDIR /app
 COPY --chown=app:app . /app
+# WORKDIR creates /app as root; COPY --chown only affects copied files.
+# Chown /app itself so the app user can write staticfiles/ at build time.
+RUN chown app:app /app
 
 USER app
 
