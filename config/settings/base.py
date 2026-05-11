@@ -126,6 +126,9 @@ EMAIL_PORT = env.int("EMAIL_PORT", default=1025)
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+# Cap SMTP socket waits so an unreachable relay fails fast instead of
+# blocking the worker until gunicorn aborts it.
+EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT", default=10)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@mfa.local")
 
 # ---------- sessions and security ----------
