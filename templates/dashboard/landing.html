@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome — MFA Project{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Multi-Factor Authentication System</h1>
+    <p class="lede">
+        Sign in with your email and password, a magic link, your Google or GitHub account,
+        or add a second factor with a TOTP authenticator app.
+    </p>
+
+    <div class="cta-row">
+        <a class="btn btn-primary" href="{% url 'accounts:register' %}">Create account</a>
+        <a class="btn btn-secondary" href="{% url 'accounts:login' %}">Log in</a>
+        <a class="btn btn-ghost" href="{% url 'magic:request' %}">Use a magic link</a>
+    </div>
+</section>
+{% endblock %}

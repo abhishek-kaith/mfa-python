@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Set up two-factor authentication — MFA Project{% endblock %}
+
+{% block content %}
+<h1>Set up two-factor authentication</h1>
+
+<p>Open your authenticator app (Google Authenticator, Microsoft Authenticator, Authy, FreeOTP) and scan this QR code:</p>
+
+<p><img src="{% url 'mfa:qr' %}" alt="TOTP QR code" style="max-width:240px;"></p>
+
+<p>Or enter this secret manually: <code>{{ secret }}</code></p>
+
+<form method="post" class="form" novalidate>
+    {% csrf_token %}
+    <div class="field">
+        <label for="{{ form.code.id_for_label }}">Enter the 6-digit code</label>
+        {{ form.code }}
+        {% if form.code.errors %}<div class="errors">{{ form.code.errors|join:" " }}</div>{% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Verify and enable</button>
+</form>
+{% endblock %}

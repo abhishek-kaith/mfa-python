@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Security — MFA Project{% endblock %}
+
+{% block content %}
+<h1>Security settings</h1>
+
+<section class="card">
+    <h2>Two-factor authentication</h2>
+    {% if has_totp %}
+        <p>You have an authenticator app enabled.</p>
+        <p>
+            <a class="btn btn-secondary" href="{% url 'mfa:regenerate_codes' %}">Regenerate backup codes</a>
+            <a class="btn btn-secondary" href="{% url 'mfa:disable' %}">Disable two-factor authentication</a>
+        </p>
+    {% else %}
+        <p>Two-factor authentication is not enabled.</p>
+        <p><a class="btn btn-primary" href="{% url 'mfa:setup' %}">Set up two-factor authentication</a></p>
+    {% endif %}
+</section>
+
+<section class="card">
+    <h2>Linked social accounts</h2>
+    {% if social_accounts %}
+        <ul>
+            {% for sa in social_accounts %}
+                <li>{{ sa.get_provider_display }} ({{ sa.email }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No social accounts linked.</p>
+    {% endif %}
+    <p>
+        <a class="btn btn-secondary" href="{% url 'oauth:start' 'google' %}">Link Google</a>
+        <a class="btn btn-secondary" href="{% url 'oauth:start' 'github' %}">Link GitHub</a>
+    </p>
+</section>
+
+<section class="card">
+    <h2>Profile</h2>
+    <p><a class="btn btn-secondary" href="{% url 'accounts:profile_edit' %}">Edit profile</a></p>
+</section>
+
+<section class="card">
+    <h2>Password</h2>
+    <p>
+        <a class="btn btn-primary" href="{% url 'accounts:password_change' %}">Change password</a>
+        <a class="btn btn-secondary" href="{% url 'accounts:password_reset' %}">Forgot password? Reset by email</a>
+    </p>
+</section>
+{% endblock %}

@@ -1,0 +1,53 @@
+[project]
+name = "mfa-project"
+version = "0.1.0"
+description = "Multi-Factor Authentication System using Python and Django"
+requires-python = ">=3.11"
+dependencies = [
+    "django>=5.0,<6.0",
+    "psycopg[binary]>=3.1",
+    "django-environ>=0.11",
+    "pyotp>=2.9",
+    "qrcode[pil]>=7.4",
+    "requests>=2.31",
+    "requests-oauthlib>=2.0",
+    "cryptography>=42",
+    "whitenoise>=6.6",
+    "gunicorn>=22.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-django>=4.8",
+    "pytest-cov",
+    "ruff>=0.6",
+    "pre-commit>=3.7",
+    "responses>=0.25",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["**/migrations/*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "S", "DJ"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S105", "S106"]
+"apps/**/tests/*.py" = ["S101", "S105", "S106"]
+"scripts/**/*.py" = ["S101", "T201"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.dev"
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-ra --strict-markers"
+
+[tool.coverage.run]
+source = ["apps"]
+omit = ["*/migrations/*", "*/tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Save your backup codes — MFA Project{% endblock %}
+
+{% block content %}
+<h1>{% if regenerated %}New backup codes{% else %}Two-factor authentication enabled{% endif %}</h1>
+<p>Kindly save these eight backup codes in a safe place. Each one can be used <strong>once</strong>, in place of an authenticator code.</p>
+
+<div class="code-grid">
+    {% for code in backup_codes %}<span>{{ code }}</span>{% endfor %}
+</div>
+
+<p>You will not see these codes again.</p>
+<p><a href="{% url 'dashboard:home' %}" class="btn btn-primary">Back to dashboard</a></p>
+{% endblock %}

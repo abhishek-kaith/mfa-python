@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Disable two-factor authentication — MFA Project{% endblock %}
+
+{% block content %}
+<h1>Disable two-factor authentication</h1>
+<p>This shall remove your authenticator device and invalidate all backup codes. Kindly confirm your password to proceed.</p>
+<form method="post" class="form" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="errors">{{ field.errors|join:" " }}</div>{% endif %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Disable two-factor authentication</button>
+</form>
+{% endblock %}

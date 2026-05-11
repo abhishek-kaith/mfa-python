@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Two-factor authentication — MFA Project{% endblock %}
+
+{% block content %}
+<h1>Enter your authenticator code</h1>
+<p>Open your authenticator app and enter the 6-digit code, or use one of your backup codes.</p>
+<form method="post" class="form" novalidate>
+    {% csrf_token %}
+    {% if error %}<p class="errors">{{ error }}</p>{% endif %}
+    <div class="field">
+        <label for="{{ form.code.id_for_label }}">Code</label>
+        {{ form.code }}
+        {% if form.code.errors %}<div class="errors">{{ form.code.errors|join:" " }}</div>{% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Verify</button>
+</form>
+{% endblock %}

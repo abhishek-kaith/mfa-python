@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-mfa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mfa}
+      POSTGRES_DB: ${POSTGRES_DB:-mfa}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mfa} -d ${POSTGRES_DB:-mfa}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # No host port. The web container reaches db over the compose network.
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      # Only expose the UI on the host. SMTP stays inside the compose network.
+      - "${MAILHOG_UI_PORT:-8026}:8025"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      UV_PROJECT_ENVIRONMENT: /opt/venv
+      DATABASE_URL: postgres://${POSTGRES_USER:-mfa}:${POSTGRES_PASSWORD:-mfa}@db:5432/${POSTGRES_DB:-mfa}
+      EMAIL_HOST: mailhog
+      EMAIL_PORT: "1025"
+      EMAIL_USE_TLS: "False"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "${WEB_PORT:-8001}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+
+volumes:
+  pgdata:

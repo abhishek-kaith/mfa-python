@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Page not found — MFA Project{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Page not found</h1>
+    <p class="lede">
+        The link you followed may be broken, or the page may have been removed.
+    </p>
+    <p>
+        <a href="{% url 'dashboard:landing' %}" class="btn btn-primary">Go to home</a>
+    </p>
+</section>
+{% endblock %}

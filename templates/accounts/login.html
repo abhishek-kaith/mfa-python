@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Log in — MFA Project{% endblock %}
+
+{% block content %}
+<h1>Log in</h1>
+<form method="post" class="form" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}<p class="errors">{{ form.non_field_errors }}</p>{% endif %}
+    {% for field in form %}
+        <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="errors">{{ field.errors|join:" " }}</div>{% endif %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Log in</button>
+</form>
+<div class="oauth-row">
+    <a class="btn btn-secondary" href="{% url 'oauth:start' 'google' %}">Sign in with Google</a>
+    <a class="btn btn-secondary" href="{% url 'oauth:start' 'github' %}">Sign in with GitHub</a>
+</div>
+
+<p class="muted">
+    <a href="{% url 'magic:request' %}">Use a magic link instead</a> ·
+    <a href="{% url 'accounts:password_reset' %}">Forgot your password?</a>
+</p>
+{% endblock %}

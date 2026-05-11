@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — MFA Project{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Welcome, {{ user.get_full_name|default:user.email }}</h1>
+
+    <div class="card-grid">
+        <article class="card">
+            <h2>Account</h2>
+            <dl>
+                <dt>Name</dt><dd>{{ user.full_name|default:"—" }}</dd>
+                <dt>Email</dt><dd>{{ user.email }}</dd>
+                <dt>Email verified</dt>
+                <dd>
+                    {% if user.is_email_verified %}
+                        Yes
+                    {% else %}
+                        No.
+                        <form method="post" action="{% url 'accounts:resend_verification' %}" class="inline-form">
+                            {% csrf_token %}
+                            <button type="submit" class="link-button">Resend link</button>
+                        </form>
+                    {% endif %}
+                </dd>
+                <dt>Joined</dt><dd>{{ user.date_joined|date:"d M Y" }}</dd>
+            </dl>
+            <p>
+                <a href="{% url 'accounts:profile_edit' %}">Edit profile</a> ·
+                <a href="{% url 'accounts:password_change' %}">Change password</a>
+            </p>
+        </article>
+
+        <article class="card">
+            <h2>Two-factor authentication</h2>
+            {% if has_totp %}
+                <p>Enabled. {{ backup_codes_remaining }} backup code{{ backup_codes_remaining|pluralize }} remaining.</p>
+                <p>
+                    <a href="{% url 'mfa:disable' %}">Disable</a> ·
+                    <a href="{% url 'mfa:regenerate_codes' %}">Regenerate backup codes</a>
+                </p>
+            {% else %}
+                <p>Not enabled. Add an authenticator app to harden your account.</p>
+                <p><a class="btn btn-primary" href="{% url 'mfa:setup' %}">Set up two-factor authentication</a></p>
+            {% endif %}
+        </article>
+
+        <article class="card">
+            <h2>Linked accounts</h2>
+            {% if social_accounts %}
+                <ul>
+                    {% for sa in social_accounts %}
+                        <li>{{ sa.get_provider_display }} ({{ sa.email }})</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No social accounts linked.</p>
+            {% endif %}
+            <p>
+                <a href="{% url 'oauth:start' 'google' %}">Link Google</a> ·
+                <a href="{% url 'oauth:start' 'github' %}">Link GitHub</a>
+            </p>
+        </article>
+    </div>
+
+    <h2>Recent login activity</h2>
+    {% if recent_attempts %}
+        <table class="data-table">
+            <thead><tr><th>When</th><th>Outcome</th><th>IP</th></tr></thead>
+            <tbody>
+                {% for a in recent_attempts %}
+                    <tr>
+                        <td>{{ a.created_at|date:"d M Y H:i" }}</td>
+                        <td>{{ a.get_outcome_display }}</td>
+                        <td>{{ a.ip_address|default:"—" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No login activity recorded yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

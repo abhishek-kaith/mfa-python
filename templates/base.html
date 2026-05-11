@@ -1,0 +1,53 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}MFA Project{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'dashboard:landing' %}">
+            <span class="brand-mark" aria-hidden="true">M</span>
+            <span class="brand-text">
+                <span class="brand-name">MFA Project</span>
+                <span class="brand-tagline">Multi-factor sign-in, demystified</span>
+            </span>
+        </a>
+        <nav class="site-nav">
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard:home' %}">Dashboard</a>
+                <a href="{% url 'dashboard:security' %}">Security</a>
+                <form method="post" action="{% url 'accounts:logout' %}" class="inline-form">{% csrf_token %}
+                    <button type="submit" class="link-button">Log out</button>
+                </form>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Log in</a>
+                <a href="{% url 'accounts:register' %}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="message message-{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>
+            <strong>MFA Project</strong> — built by Abhishek, Akhil and Himanshu,
+            MCA 2nd Semester, Department of Computer Science,
+            Himachal Pradesh University, Shimla.
+            Guide: Mr. Anshul Kalia. Session 2025-26.
+        </p>
+    </footer>
+</body>
+</html>

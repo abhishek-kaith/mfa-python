@@ -1,0 +1,11 @@
+Hello{% if user.full_name %} {{ user.full_name }}{% endif %},
+
+Welcome to the Multi-Factor Authentication System.
+
+Kindly confirm your email address by opening this link:
+
+{{ verify_url }}
+
+This link is valid for 24 hours. If you did not create this account, please ignore this email.
+
+— The MFA Project Team

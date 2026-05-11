@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Forbidden — MFA Project{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>You do not have access to this page</h1>
+    <p class="lede">
+        If this is unexpected, kindly check that you are logged in to the correct account.
+    </p>
+    <p><a href="{% url 'dashboard:landing' %}" class="btn btn-primary">Back to home</a></p>
+</section>
+{% endblock %}

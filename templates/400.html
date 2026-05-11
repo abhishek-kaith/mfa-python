@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Bad request — MFA Project{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Bad request</h1>
+    <p class="lede">
+        That request could not be processed. Kindly try again from the start.
+    </p>
+    <p><a href="{% url 'dashboard:landing' %}" class="btn btn-primary">Back to home</a></p>
+</section>
+{% endblock %}

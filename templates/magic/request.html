@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Sign in with a magic link — MFA Project{% endblock %}
+
+{% block content %}
+<h1>Sign in with a magic link</h1>
+<p>Enter your email and we shall send you a one-time link valid for {{ MAGIC_LINK_TTL_MINUTES|default:15 }} minutes.</p>
+<form method="post" class="form" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<div class="errors">{{ field.errors|join:" " }}</div>{% endif %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Send link</button>
+</form>
+<p><a href="{% url 'accounts:login' %}">Use email and password instead</a></p>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Link invalid — MFA Project{% endblock %}
+
+{% block content %}
+<h1>This link is no longer valid</h1>
+<p>It may have expired or already been used. Kindly request a new one.</p>
+<p><a href="{% url 'magic:request' %}" class="btn btn-secondary">Request new link</a></p>
+{% endblock %}
